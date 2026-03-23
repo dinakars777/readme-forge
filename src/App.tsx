@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { PenTool, Copy, Download, Plus, Trash2, GripVertical } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import './App.css';
-import { INITIAL_BLOCKS, generateMarkdown, type Block, type BlockType } from './store';
+import { INITIAL_BLOCKS, generateMarkdown, type Block, type BlockType, TEMPLATES, TECH_STACK_BADGES } from './store';
 
 function App() {
   const [blocks, setBlocks] = useState<Block[]>(INITIAL_BLOCKS);
+  const [selectedTemplate, setSelectedTemplate] = useState<string>('cli-tool');
 
   const addBlock = (type: BlockType) => {
     const newBlock: Block = {
@@ -51,6 +52,18 @@ function App() {
           readme-forge
         </h1>
         <div className="header-actions">
+          <select 
+            value={selectedTemplate} 
+            onChange={(e) => {
+              setSelectedTemplate(e.target.value);
+              setBlocks(TEMPLATES[e.target.value as keyof typeof TEMPLATES]);
+            }}
+            style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--bg-secondary)' }}
+          >
+            <option value="cli-tool">CLI Tool Template</option>
+            <option value="react-library">React Library Template</option>
+            <option value="api">API Template</option>
+          </select>
           <button className="btn btn-secondary" onClick={handleCopy}>
             <Copy size={16} />
             Copy Markdown
@@ -77,10 +90,15 @@ function App() {
 
           <div className="editor-sidebar">
             <button className="add-block-btn" onClick={() => addBlock('title')}>+ Title</button>
+            <button className="add-block-btn" onClick={() => addBlock('badges')}>+ Badges</button>
             <button className="add-block-btn" onClick={() => addBlock('description')}>+ Description</button>
+            <button className="add-block-btn" onClick={() => addBlock('toc')}>+ Table of Contents</button>
             <button className="add-block-btn" onClick={() => addBlock('features')}>+ Features</button>
             <button className="add-block-btn" onClick={() => addBlock('installation')}>+ Installation</button>
             <button className="add-block-btn" onClick={() => addBlock('usage')}>+ Usage</button>
+            <button className="add-block-btn" onClick={() => addBlock('techstack')}>+ Tech Stack</button>
+            <button className="add-block-btn" onClick={() => addBlock('contributing')}>+ Contributing</button>
+            <button className="add-block-btn" onClick={() => addBlock('license')}>+ License</button>
           </div>
 
           <div className="blocks-container">
@@ -113,6 +131,31 @@ function App() {
                     </div>
                   )}
 
+                  {block.type === 'badges' && (
+                    <div className="form-group">
+                      <label>Select Badges</label>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        {['npm', 'license', 'downloads', 'build'].map(badge => (
+                          <label key={badge} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <input
+                              type="checkbox"
+                              checked={(block.content.badges || []).includes(badge)}
+                              onChange={(e) => {
+                                const badges = block.content.badges || [];
+                                if (e.target.checked) {
+                                  updateBlock(block.id, { ...block.content, badges: [...badges, badge] });
+                                } else {
+                                  updateBlock(block.id, { ...block.content, badges: badges.filter((b: string) => b !== badge) });
+                                }
+                              }}
+                            />
+                            {badge.charAt(0).toUpperCase() + badge.slice(1)}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   {block.type === 'description' && (
                     <div className="form-group">
                       <label>Description Text</label>
@@ -122,6 +165,15 @@ function App() {
                         onChange={(e) => updateBlock(block.id, { ...block.content, text: e.target.value })}
                         placeholder="Write a clear, concise description..."
                       />
+                    </div>
+                  )}
+
+                  {block.type === 'toc' && (
+                    <div className="form-group">
+                      <label>Table of Contents</label>
+                      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                        Auto-generated from section headers
+                      </p>
                     </div>
                   )}
 
@@ -184,6 +236,58 @@ function App() {
                         />
                       </div>
                     </>
+                  )}
+
+                  {block.type === 'techstack' && (
+                    <div className="form-group">
+                      <label>Select Technologies</label>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem', maxHeight: '300px', overflowY: 'auto' }}>
+                        {TECH_STACK_BADGES.map(tech => (
+                          <label key={tech.name} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <input
+                              type="checkbox"
+                              checked={(block.content.stack || []).includes(tech.name)}
+                              onChange={(e) => {
+                                const stack = block.content.stack || [];
+                                if (e.target.checked) {
+                                  updateBlock(block.id, { ...block.content, stack: [...stack, tech.name] });
+                                } else {
+                                  updateBlock(block.id, { ...block.content, stack: stack.filter((s: string) => s !== tech.name) });
+                                }
+                              }}
+                            />
+                            {tech.name}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {block.type === 'contributing' && (
+                    <div className="form-group">
+                      <label>Contributing Guidelines</label>
+                      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
+                        Auto-generated standard contributing guidelines
+                      </p>
+                    </div>
+                  )}
+
+                  {block.type === 'license' && (
+                    <div className="form-group">
+                      <label>License Type</label>
+                      <select
+                        value={block.content.license || 'MIT'}
+                        onChange={(e) => updateBlock(block.id, { ...block.content, license: e.target.value })}
+                        style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--bg-secondary)', width: '100%' }}
+                      >
+                        <option value="MIT">MIT</option>
+                        <option value="Apache-2.0">Apache 2.0</option>
+                        <option value="GPL-3.0">GPL 3.0</option>
+                        <option value="BSD-3-Clause">BSD 3-Clause</option>
+                        <option value="ISC">ISC</option>
+                        <option value="Unlicense">Unlicense</option>
+                      </select>
+                    </div>
                   )}
 
                 </div>
