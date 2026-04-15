@@ -52,6 +52,14 @@ function App() {
           readme-forge
         </h1>
         <div className="header-actions">
+          <a 
+            href="https://github.com/dinakars777/readme-forge" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="star-button"
+          >
+            ⭐ Star on GitHub
+          </a>
           <select 
             value={selectedTemplate} 
             onChange={(e) => {
