@@ -1,6 +1,6 @@
 # readme-forge 🧰
 
-> A visual, drag-and-drop builder for beautiful GitHub README files.
+> Visual builder for GitHub README files.
 
 🔗 **[Live Demo](https://dinakars777.github.io/readme-forge/)**
 
@@ -9,20 +9,20 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite)](https://vitejs.dev)
 
-Stop wrestling with Markdown syntax. `readme-forge` gives you a clean block-based editor on the left and a live GitHub-flavored preview on the right.
+Block-based editor on the left. Live GitHub preview on the right. No Markdown syntax wrestling.
 
 ---
 
 ## Features
 
-- ✨ **Block-Based Editing** — build your README from 10 structured blocks: Title, Badges, Description, TOC, Features, Installation, Usage, Tech Stack, Contributing, License
-- 🎨 **Template Presets** — start with pre-configured templates for CLI tools, React libraries, or APIs
-- 🏷️ **Smart Badges** — add npm, license, downloads, and build status badges with one click
-- 🛠️ **Tech Stack Selector** — choose from 13 popular technologies with auto-generated badges
-- 🔄 **Real-Time Preview** — powered by `react-markdown` to simulate exactly how GitHub renders your file
-- 🏗️ **Drag to Reorder** — rearrange sections with up/down buttons
-- 💾 **1-Click Export** — copy raw Markdown to clipboard or download `README.md` directly
-- 📋 **Auto-Generated Content** — TOC and Contributing sections generate automatically
+- ✨ **Block-Based Editing** — 10 structured blocks: Title, Badges, Description, TOC, Features, Installation, Usage, Tech Stack, Contributing, License
+- 🎨 **Template Presets** — CLI tools, React libraries, APIs
+- 🏷️ **Smart Badges** — npm, license, downloads, build status
+- 🛠️ **Tech Stack Selector** — 13 popular technologies with auto-generated badges
+- 🔄 **Real-Time Preview** — `react-markdown` simulates GitHub rendering
+- 🏗️ **Reorder Sections** — up/down buttons
+- 💾 **1-Click Export** — copy to clipboard or download `README.md`
+- 📋 **Auto-Generated Content** — TOC and Contributing sections
 
 ---
 
